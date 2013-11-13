@@ -1,4 +1,4 @@
-moodle-local_piwik
+moodle-local_analytics
 ==================
 
 A local Moodle Module adding Piwik Analytics
