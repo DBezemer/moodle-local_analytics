@@ -58,3 +58,10 @@ $description = get_string('siteid_desc', 'local_analytics');
 $default = '1';
 $setting = new admin_setting_configtext($name, $title, $description, $default);
 $settings->add($setting);
+
+$name = 'local_analytics/trackadmin';
+$title = get_string('trackadmin', 'local_analytics');
+$description = get_string('trackadmin_desc', 'local_analytics');
+$default = false;
+$setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
+$settings->add($setting);

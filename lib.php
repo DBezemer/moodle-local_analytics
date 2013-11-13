@@ -31,40 +31,50 @@ function get_config() {
     $imagetrack = get_config('local_analytics', 'imagetrack');
     $siteurl = get_config('local_analytics', 'siteurl');
     $siteid = get_config('local_analytics', 'siteid');
+	$trackadmin = get_config('local_analytics', 'trackadmin');	
 }
  
-function analytics_trackurl() {
-    global $CFG, $DB, $PAGE, $COURSE, $OUTPUT;
+function alternative_trackurl() {
+    
+    // Retrieve globals
+	global $DB, $PAGE, $COURSE, $SITE;
+	// Pre-load search parameter for later use
+    $search = optional_param('search', '', PARAM_RAW);
+	// Get NavBar items
+	$this->page->navbar->get_items();
 
-    $pageinfo = get_context_info_array($PAGE->context->id);
-
-    $trackurl = array();
-
-    if ($COURSE->id == 1) {
-        return '';
-    }
-
-    // Adds course category name.
-    if (isset($pageinfo[1]->category)) {
-        if ($category = $DB->get_record('course_categories', array('id'=>$pageinfo[1]->category))) {
-            $trackurl[] = urlencode($category->name);
+	// Check if we are at site level, or at the login page
+    if ($COURSE->id == 1 && empty($search)) {
+        if (strpos($PAGE->url, "login")) {
+            return "login";
+        } else {
+            return $SITE->shortname;
         }
-    }
+	// Check if we got to this page searching
+    } else if (!empty($search)) {
+        return "search.php?keyword=".$search;
+    } else {
+	// No alternative trackurl necessary
+		return false;
+	}
+}
 
-    // Adds course full name.
-    if (isset($pageinfo[1]->fullname)) {
-        $trackurl[] = urlencode($pageinfo[1]->fullname);
-    }
-
-    // Adds activity name.
-    if (isset($pageinfo[2]->name)) {
-        $trackurl[] = urlencode($pageinfo[2]->name);
-    }
-
-    return implode('/', $trackurl);
+function initiate_trackurl() {
+	
+	global $OUTPUT;
+	// Initiate clean URL.
+	if (!alternative_trackurl()) {
+		$fullpath = explode(" /",strip_tags($OUTPUT->navbar()));
+		$trackurl = str_replace(" ","+",implode("/",$fullpath));
+	} else {
+		$trackurl = alternative_trackurl();
+	}
+	
+	return $trackurl;
 }
 
 function insert_tracking() {
+	global $CFG;
 
     if ($enabled) {
         $CFG->additionalhtmlfooter .= "";
