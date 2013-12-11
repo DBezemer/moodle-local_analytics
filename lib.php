@@ -25,64 +25,80 @@
  * @author     David Bezemer
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+ 
+function analytics_trackurl() {
+    global $DB, $PAGE, $COURSE;
+    $pageinfo = get_context_info_array($PAGE->context->id);
+    $trackurl = "'";
 
-function get_config() {
+    if ($COURSE->id == 1) {
+        return 'document.title';
+    }
+
+    // Adds course category name.
+    if (isset($pageinfo[1]->category)) {
+        if ($category = $DB->get_record('course_categories', array('id'=>$pageinfo[1]->category))) {
+			$cats=explode("/",$category->path);
+			foreach ($cats as $cat) {
+				if ($categorydepth = $DB->get_record("course_categories", array("id" => $cat))) {;
+					$trackurl .= $categorydepth->name.'/';
+				}
+			}
+        }
+    }
+
+    // Adds course full name.
+    if (isset($pageinfo[1]->fullname)) {
+		if (isset($pageinfo[2]->name)) {
+			$trackurl .= $pageinfo[1]->fullname.'/';
+		} else if ($PAGE->user_is_editing()) {
+			$trackurl .= $pageinfo[1]->fullname.'/'.get_string('edit', 'local_analytics');
+		} else {
+			$trackurl .= $pageinfo[1]->fullname.'/'.get_string('view', 'local_analytics');
+		}
+    }
+
+    // Adds activity name.
+    if (isset($pageinfo[2]->name)) {
+        $trackurl .= $pageinfo[2]->modname.'/'.$pageinfo[2]->name;
+    }
+	
+	$trackurl .= "'";
+	return $trackurl;
+}
+ 
+function insert_analytics_tracking() {
+    global $CFG;
     $enabled = get_config('local_analytics', 'enabled');
     $imagetrack = get_config('local_analytics', 'imagetrack');
     $siteurl = get_config('local_analytics', 'siteurl');
     $siteid = get_config('local_analytics', 'siteid');
-	$trackadmin = get_config('local_analytics', 'trackadmin');	
-}
- 
-function alternative_trackurl() {
+    $trackadmin = get_config('local_analytics', 'trackadmin');
     
-    // Retrieve globals
-	global $DB, $PAGE, $COURSE, $SITE;
-	// Pre-load search parameter for later use
-    $search = optional_param('search', '', PARAM_RAW);
-	// Get NavBar items
-	$this->page->navbar->get_items();
-
-	// Check if we are at site level, or at the login page
-    if ($COURSE->id == 1 && empty($search)) {
-        if (strpos($PAGE->url, "login")) {
-            return "login";
-        } else {
-            return $SITE->shortname;
-        }
-	// Check if we got to this page searching
-    } else if (!empty($search)) {
-        return "search.php?keyword=".$search;
+    if ($imagetrack) {
+        $addition = '<noscript><p><img src="//'.$siteurl.'/piwik.php?idsite='.$siteid.' style="border:0" alt="" /></p></noscript>';
     } else {
-	// No alternative trackurl necessary
-		return false;
-	}
-}
-
-function initiate_trackurl() {
-	
-	global $OUTPUT;
-	// Initiate clean URL.
-	if (!alternative_trackurl()) {
-		$fullpath = explode(" /",strip_tags($OUTPUT->navbar()));
-		$trackurl = str_replace(" ","+",implode("/",$fullpath));
-	} else {
-		$trackurl = alternative_trackurl();
-	}
-	
-	return $trackurl;
-}
-
-function insert_tracking() {
-	global $CFG;
-
-    if ($enabled) {
-        $CFG->additionalhtmlfooter .= "";
+        $addition = '';
     }
-
-    if (debugging()) {
-        $CFG->additionalhtmlfooter .= "<span class='badge badge-success'>/".$trackurl."</span>";
+    
+    if ($enabled && ((is_siteadmin() === $trackadmin) || $trackadmin)) {
+        $CFG->additionalhtmlfooter = "
+            <!-- Piwik -->
+            <script type='text/javascript'> 
+            var _paq = _paq || [];
+            _paq.push(['setDocumentTitle', ".analytics_trackurl()."]);
+            _paq.push(['trackPageView']);
+            _paq.push(['enableLinkTracking']);
+            (function() {
+            var u=(('https:' == document.location.protocol) ? 'https' : 'http') + '://".$siteurl."//';
+            _paq.push(['setTrackerUrl', u+'piwik.php']);
+            _paq.push(['setSiteId', ".$siteid."]);
+            var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0]; g.type='text/javascript';
+            g.defer=true; g.async=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s); })();
+            </script>"
+            .$addition
+            ."<!-- End Piwik Code -->";
     }
 }
 
-insert_tracking();
+insert_analytics_tracking();

@@ -29,5 +29,5 @@
 $plugin->version  = 2013111300;
 $plugin->requires = 2011033010;
 $plugin->release = '0.1 (Build: 20131113)';
-$plugin->maturity = MATURITY_ALPHA;
+$plugin->maturity = MATURITY_BETA;
 $plugin->component = 'local_analytics';

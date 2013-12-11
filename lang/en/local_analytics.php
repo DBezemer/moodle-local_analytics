@@ -29,9 +29,13 @@
 $string['pluginname'] = 'Analytics';
 $string['siteid'] = 'Site ID';
 $string['siteid_desc'] = 'Enter your Site ID';
-$string['siteid'] = 'Analytics URL';
-$string['siteid_desc'] = 'Enter your Piwik Analaytics URL';
+$string['siteurl'] = 'Analytics URL';
+$string['siteurl_desc'] = 'Enter your Piwik Analaytics URL';
 $string['enabled'] = 'Enabled';
 $string['enabled_desc'] = 'Enable Analytics for Moodle';
 $string['imagetrack'] = 'Image Tracking';
 $string['imagetrack_desc'] = 'Enable Image Tracking for Moodle for browsers with JavaScript disabled';
+$string['trackadmin'] = 'Tracking Admins';
+$string['trackadmin_desc'] = 'Enable tracking of Admin users (not recommended)';
+$string['view'] = 'View';
+$string['edit'] = 'Edit';
