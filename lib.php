@@ -81,7 +81,7 @@ function insert_analytics_tracking() {
         $addition = '';
     }
     
-    if ($enabled && ((is_siteadmin() === $trackadmin) || $trackadmin)) {
+    if ($enabled && (!is_siteadmin() || $trackadmin)) {
         $CFG->additionalhtmlfooter = "
             <!-- Piwik -->
             <script type='text/javascript'> 
