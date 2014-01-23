@@ -26,8 +26,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$plugin->version  = 2013111300;
+$plugin->version  = 2014012300;
 $plugin->requires = 2011033010;
-$plugin->release = '0.1 (Build: 20131113)';
-$plugin->maturity = MATURITY_BETA;
+$plugin->release = '1.1 (Build: 2014012300)';
+$plugin->maturity = MATURITY_STABLE;
 $plugin->component = 'local_analytics';

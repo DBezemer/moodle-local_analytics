@@ -27,44 +27,40 @@
  */
  
 function analytics_trackurl() {
-    global $DB, $PAGE, $COURSE;
+    global $DB, $PAGE, $COURSE, $SITE;
     $pageinfo = get_context_info_array($PAGE->context->id);
     $trackurl = "'";
-
-    if ($COURSE->id == 1) {
-        return 'document.title';
-    }
 
     // Adds course category name.
     if (isset($pageinfo[1]->category)) {
         if ($category = $DB->get_record('course_categories', array('id'=>$pageinfo[1]->category))) {
-			$cats=explode("/",$category->path);
-			foreach ($cats as $cat) {
-				if ($categorydepth = $DB->get_record("course_categories", array("id" => $cat))) {;
-					$trackurl .= $categorydepth->name.'/';
-				}
-			}
+            $cats=explode("/",$category->path);
+            foreach ($cats as $cat) {
+                if ($categorydepth = $DB->get_record("course_categories", array("id" => $cat))) {;
+                    $trackurl .= $categorydepth->name.'/';
+                }
+            }
         }
     }
 
     // Adds course full name.
     if (isset($pageinfo[1]->fullname)) {
-		if (isset($pageinfo[2]->name)) {
-			$trackurl .= $pageinfo[1]->fullname.'/';
-		} else if ($PAGE->user_is_editing()) {
-			$trackurl .= $pageinfo[1]->fullname.'/'.get_string('edit', 'local_analytics');
-		} else {
-			$trackurl .= $pageinfo[1]->fullname.'/'.get_string('view', 'local_analytics');
-		}
+        if (isset($pageinfo[2]->name)) {
+            $trackurl .= $pageinfo[1]->fullname.'/';
+        } else if ($PAGE->user_is_editing()) {
+            $trackurl .= $pageinfo[1]->fullname.'/'.get_string('edit', 'local_analytics');
+        } else {
+            $trackurl .= $pageinfo[1]->fullname.'/'.get_string('view', 'local_analytics');
+        }
     }
 
     // Adds activity name.
     if (isset($pageinfo[2]->name)) {
         $trackurl .= $pageinfo[2]->modname.'/'.$pageinfo[2]->name;
     }
-	
-	$trackurl .= "'";
-	return $trackurl;
+    
+    $trackurl .= "'";
+    return $trackurl;
 }
  
 function insert_analytics_tracking() {
@@ -82,8 +78,7 @@ function insert_analytics_tracking() {
     }
     
     if ($enabled && (!is_siteadmin() || $trackadmin)) {
-        $CFG->additionalhtmlfooter = "
-            <!-- Piwik -->
+        $CFG->additionalhtmlhead = "
             <script type='text/javascript'> 
             var _paq = _paq || [];
             _paq.push(['setDocumentTitle', ".analytics_trackurl()."]);
@@ -95,9 +90,8 @@ function insert_analytics_tracking() {
             _paq.push(['setSiteId', ".$siteid."]);
             var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0]; g.type='text/javascript';
             g.defer=true; g.async=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s); })();
-            </script>"
-            .$addition
-            ."<!-- End Piwik Code -->";
+            </script>
+			".$addition;
     }
 }
 

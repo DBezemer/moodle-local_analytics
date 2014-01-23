@@ -29,42 +29,38 @@
 function analytics_trackurl() {
     global $DB, $PAGE, $COURSE;
     $pageinfo = get_context_info_array($PAGE->context->id);
-    $trackurl = "'";
-
-    if ($COURSE->id == 1) {
-        return 'document.title';
-    }
+    $trackurl = "'/";
 
     // Adds course category name.
     if (isset($pageinfo[1]->category)) {
         if ($category = $DB->get_record('course_categories', array('id'=>$pageinfo[1]->category))) {
-			$cats=explode("/",$category->path);
-			foreach ($cats as $cat) {
-				if ($categorydepth = $DB->get_record("course_categories", array("id" => $cat))) {;
-					$trackurl .= $categorydepth->name.'/';
-				}
-			}
+            $cats=explode("/",$category->path);
+            foreach ($cats as $cat) {
+                if ($categorydepth = $DB->get_record("course_categories", array("id" => $cat))) {;
+                    $trackurl .= urlencode($categorydepth->name).'/';
+                }
+            }
         }
     }
 
     // Adds course full name.
     if (isset($pageinfo[1]->fullname)) {
-		if (isset($pageinfo[2]->name)) {
-			$trackurl .= $pageinfo[1]->fullname.'/';
-		} else if ($PAGE->user_is_editing()) {
-			$trackurl .= $pageinfo[1]->fullname.'/'.get_string('edit', 'local_analytics');
-		} else {
-			$trackurl .= $pageinfo[1]->fullname.'/'.get_string('view', 'local_analytics');
-		}
+        if (isset($pageinfo[2]->name)) {
+            $trackurl .= urlencode($pageinfo[1]->fullname).'/';
+        } else if ($PAGE->user_is_editing()) {
+            $trackurl .= urlencode($pageinfo[1]->fullname).'/'.get_string('edit', 'local_analytics');
+        } else {
+            $trackurl .= urlencode($pageinfo[1]->fullname).'/'.get_string('view', 'local_analytics');
+        }
     }
 
     // Adds activity name.
     if (isset($pageinfo[2]->name)) {
-        $trackurl .= $pageinfo[2]->modname.'/'.$pageinfo[2]->name;
+        $trackurl .= urlencode($pageinfo[2]->modname).'/'.urlencode($pageinfo[2]->name);
     }
-	
-	$trackurl .= "'";
-	return $trackurl;
+    
+    $trackurl .= "'";
+    return $trackurl;
 }
  
 function insert_analytics_tracking() {
@@ -72,22 +68,26 @@ function insert_analytics_tracking() {
     $enabled = get_config('local_analytics', 'enabled');
     $siteid = get_config('local_analytics', 'siteid');
     $trackadmin = get_config('local_analytics', 'trackadmin');
-	
-	if ($enabled && (!is_siteadmin() || $trackadmin)) {
-        $CFG->additionalhtmlfooter .= "
-		<script type='text/javascript' name='localga'>
-		  var _gaq = _gaq || [];
-		  _gaq.push(['_setAccount', '".$siteid."']);
-		  _gaq.push(['_trackPageview','/".$analytics_trackurl()."']);
+    $cleanurl = get_config('local_analytics', 'cleanurl');
+    
+    if ($enabled && (!is_siteadmin() || $trackadmin)) {
+        $CFG->additionalhtmlhead .= "
+            <script type='text/javascript' name='localga'>
+              var _gaq = _gaq || [];
+              _gaq.push(['_setAccount', '".$siteid."']);
+              _gaq.push(['_trackPageview',".($cleanurl ? analytics_trackurl() : '')."]);
+              _gaq.push(['_setSiteSpeedSampleRate', 50]);
 
-		  (function() {
-			var ga = document.createElement('script'); ga.type = 'text/javascript'; 
-			ga.async = true;
-			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-		  })();
-		</script>";
-	
+              (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; 
+                ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+              })();
+            </script>
+			";
+    }
+    
 }
 
 insert_analytics_tracking();

@@ -26,4 +26,17 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once(dirname(__FILE__).'/lib.php');
+require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
+
+$enabled = get_config('local_analytics', 'enabled');
+$analytics = get_config('local_analytics', 'analytics');
+
+if ($enabled) {
+    if ($analytics === "piwik") {
+        require_once(dirname(__FILE__).'/piwik.php');
+    } elseif ($analytics === "ganalytics") {
+        require_once(dirname(__FILE__).'/ganalytics.php');
+    } elseif ($analytics === "guniversal") {
+        require_once(dirname(__FILE__).'/guniversal.php');
+    }
+}
