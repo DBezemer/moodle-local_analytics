@@ -38,6 +38,21 @@ $default = true;
 $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
 $settings->add($setting);
 
+$name = 'local_analytics/analytics';
+$title = get_string('analytics' , 'local_analytics');
+$description = get_string('analyticsdesc', 'local_analytics');
+$ganalytics = get_string('ganalytics', 'local_analytics');
+$guniversal = get_string('guniversal', 'local_analytics');
+$piwik = get_string('piwik', 'local_analytics');
+$default = 'Piwik';
+$choices = array(   
+                'Piwik' => $piwik,
+                'Google Analytics (deprecated)' => $ganalytics,
+                'Google Universal Analytics' => $guniversal,
+                );
+$setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
+$temp->add($setting);
+
 $name = 'local_analytics/imagetrack';
 $title = get_string('imagetrack', 'local_analytics');
 $description = get_string('imagetrack_desc', 'local_analytics');
