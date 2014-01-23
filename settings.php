@@ -44,14 +44,14 @@ $description = get_string('analyticsdesc', 'local_analytics');
 $ganalytics = get_string('ganalytics', 'local_analytics');
 $guniversal = get_string('guniversal', 'local_analytics');
 $piwik = get_string('piwik', 'local_analytics');
-$default = 'Piwik';
+$default = 'piwik';
 $choices = array(   
-                'Piwik' => $piwik,
-                'Google Analytics (deprecated)' => $ganalytics,
-                'Google Universal Analytics' => $guniversal,
+                'piwik' => $piwik,
+                'ganalytics' => $ganalytics,
+                'guniversal' => $guniversal,
                 );
 $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
-$temp->add($setting);
+$settings->add($setting);
 
 $name = 'local_analytics/imagetrack';
 $title = get_string('imagetrack', 'local_analytics');

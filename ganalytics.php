@@ -70,10 +70,24 @@ function analytics_trackurl() {
 function insert_analytics_tracking() {
     global $CFG;
     $enabled = get_config('local_analytics', 'enabled');
-    $imagetrack = get_config('local_analytics', 'imagetrack');
-    $siteurl = get_config('local_analytics', 'siteurl');
     $siteid = get_config('local_analytics', 'siteid');
     $trackadmin = get_config('local_analytics', 'trackadmin');
+	
+	if ($enabled && (!is_siteadmin() || $trackadmin)) {
+        $CFG->additionalhtmlfooter .= "
+		<script type='text/javascript' name='localga'>
+		  var _gaq = _gaq || [];
+		  _gaq.push(['_setAccount', '".$siteid."']);
+		  _gaq.push(['_trackPageview','/".$analytics_trackurl()."']);
+
+		  (function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; 
+			ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		  })();
+		</script>";
+	
 }
 
 insert_analytics_tracking();

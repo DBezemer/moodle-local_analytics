@@ -30,13 +30,15 @@ require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 
 $enabled = get_config('local_analytics', 'enabled');
 $analytics = get_config('local_analytics', 'analytics');
-
+echo "Analytics!!!!";
 if ($enabled) {
-	if ($analytics === "Piwik") {
+	echo "Enabled!!!!";
+	if ($analytics === "piwik") {
+		echo "Piwik!!!!";
 		require_once(dirname(__FILE__).'/piwik.php');
-	} elseif ($analytics === "Google Analytics (deprecated)") {
+	} elseif ($analytics === "ganalytics") {
 		require_once(dirname(__FILE__).'/ganalytics.php');
-	} elseif ($analytics === "Google Universal Analytics") {
+	} elseif ($analytics === "guniversal") {
 		require_once(dirname(__FILE__).'/guniversal.php');
 	}
 }

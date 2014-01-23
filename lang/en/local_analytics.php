@@ -27,10 +27,12 @@
  */
  
 $string['pluginname'] = 'Analytics';
+$string['analytics'] = 'Analytics';
+$string['analyticsdesc'] = 'Choose the type of Analytics you want to insert';
 $string['siteid'] = 'Site ID';
 $string['siteid_desc'] = 'Enter your Site ID';
 $string['siteurl'] = 'Analytics URL';
-$string['siteurl_desc'] = 'Enter your Piwik Analaytics URL';
+$string['siteurl_desc'] = 'Enter your Piwik Analytics URL without http(s) (for both Google Analytics types leave empty)';
 $string['enabled'] = 'Enabled';
 $string['enabled_desc'] = 'Enable Analytics for Moodle';
 $string['imagetrack'] = 'Image Tracking';
@@ -39,3 +41,6 @@ $string['trackadmin'] = 'Tracking Admins';
 $string['trackadmin_desc'] = 'Enable tracking of Admin users (not recommended)';
 $string['view'] = 'View';
 $string['edit'] = 'Edit';
+$string['piwik'] = 'Piwik';
+$string['ganalytics'] = 'Google Analytics (deprecated)';
+$string['guniversal'] = 'Google Universal Analytics';
