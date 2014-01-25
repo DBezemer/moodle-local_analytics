@@ -71,7 +71,7 @@ function insert_analytics_tracking() {
     $cleanurl = get_config('local_analytics', 'cleanurl');
     
     if ($enabled && (!is_siteadmin() || $trackadmin)) {
-        $CFG->additionalhtmlhead .= "
+        $CFG->additionalhtmlfooter .= "
             <script type='text/javascript' name='localga'>
               var _gaq = _gaq || [];
               _gaq.push(['_setAccount', '".$siteid."']);
@@ -91,3 +91,7 @@ function insert_analytics_tracking() {
 }
 
 insert_analytics_tracking();
+
+if (debugging()) {
+    $CFG->additionalhtmlfooter .= "<span class='badge badge-success'>Tracking: ".analytics_trackurl()."</span>";
+}

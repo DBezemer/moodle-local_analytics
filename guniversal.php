@@ -97,3 +97,7 @@ function insert_analytics_tracking() {
 }
 
 insert_analytics_tracking();
+
+if (debugging()) {
+    $CFG->additionalhtmlfooter .= "<span class='badge badge-success'>Tracking: ".analytics_trackurl()."</span>";
+}
