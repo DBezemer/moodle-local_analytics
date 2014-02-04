@@ -74,7 +74,7 @@ function insert_analytics_tracking() {
         $addition = 
             "{'hitType' : 'pageview',
             'page' : ".analytics_trackurl().",
-            'title' : '".$PAGE->heading."'
+            'title' : '".addslashes($PAGE->heading)."'
             }";
     } else {
         $addition = "'pageview'";
