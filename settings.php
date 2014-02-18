@@ -28,62 +28,64 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$settings = new admin_settingpage('local_analytics', get_string('pluginname', 'local_analytics'));
-$ADMIN->add('localplugins', $settings);
+if (is_siteadmin()) {
+	$settings = new admin_settingpage('local_analytics', get_string('pluginname', 'local_analytics'));
+	$ADMIN->add('localplugins', $settings);
 
-$name = 'local_analytics/enabled';
-$title = get_string('enabled', 'local_analytics');
-$description = get_string('enabled_desc', 'local_analytics');
-$default = true;
-$setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-$settings->add($setting);
+	$name = 'local_analytics/enabled';
+	$title = get_string('enabled', 'local_analytics');
+	$description = get_string('enabled_desc', 'local_analytics');
+	$default = true;
+	$setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
+	$settings->add($setting);
 
-$name = 'local_analytics/analytics';
-$title = get_string('analytics' , 'local_analytics');
-$description = get_string('analyticsdesc', 'local_analytics');
-$ganalytics = get_string('ganalytics', 'local_analytics');
-$guniversal = get_string('guniversal', 'local_analytics');
-$piwik = get_string('piwik', 'local_analytics');
-$default = 'piwik';
-$choices = array(   
-                'piwik' => $piwik,
-                'ganalytics' => $ganalytics,
-                'guniversal' => $guniversal,
-                );
-$setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
-$settings->add($setting);
+	$name = 'local_analytics/analytics';
+	$title = get_string('analytics' , 'local_analytics');
+	$description = get_string('analyticsdesc', 'local_analytics');
+	$ganalytics = get_string('ganalytics', 'local_analytics');
+	$guniversal = get_string('guniversal', 'local_analytics');
+	$piwik = get_string('piwik', 'local_analytics');
+	$default = 'piwik';
+	$choices = array(   
+					'piwik' => $piwik,
+					'ganalytics' => $ganalytics,
+					'guniversal' => $guniversal,
+					);
+	$setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
+	$settings->add($setting);
 
-$name = 'local_analytics/siteid';
-$title = get_string('siteid', 'local_analytics');
-$description = get_string('siteid_desc', 'local_analytics');
-$default = '1';
-$setting = new admin_setting_configtext($name, $title, $description, $default);
-$settings->add($setting);
+	$name = 'local_analytics/siteid';
+	$title = get_string('siteid', 'local_analytics');
+	$description = get_string('siteid_desc', 'local_analytics');
+	$default = '1';
+	$setting = new admin_setting_configtext($name, $title, $description, $default);
+	$settings->add($setting);
 
-$name = 'local_analytics/imagetrack';
-$title = get_string('imagetrack', 'local_analytics');
-$description = get_string('imagetrack_desc', 'local_analytics');
-$default = true;
-$setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-$settings->add($setting);
+	$name = 'local_analytics/imagetrack';
+	$title = get_string('imagetrack', 'local_analytics');
+	$description = get_string('imagetrack_desc', 'local_analytics');
+	$default = true;
+	$setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
+	$settings->add($setting);
 
-$name = 'local_analytics/siteurl';
-$title = get_string('siteurl', 'local_analytics');
-$description = get_string('siteurl_desc', 'local_analytics');
-$default = '';
-$setting = new admin_setting_configtext($name, $title, $description, $default);
-$settings->add($setting);
+	$name = 'local_analytics/siteurl';
+	$title = get_string('siteurl', 'local_analytics');
+	$description = get_string('siteurl_desc', 'local_analytics');
+	$default = '';
+	$setting = new admin_setting_configtext($name, $title, $description, $default);
+	$settings->add($setting);
 
-$name = 'local_analytics/trackadmin';
-$title = get_string('trackadmin', 'local_analytics');
-$description = get_string('trackadmin_desc', 'local_analytics');
-$default = false;
-$setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-$settings->add($setting);
+	$name = 'local_analytics/trackadmin';
+	$title = get_string('trackadmin', 'local_analytics');
+	$description = get_string('trackadmin_desc', 'local_analytics');
+	$default = false;
+	$setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
+	$settings->add($setting);
 
-$name = 'local_analytics/cleanurl';
-$title = get_string('cleanurl', 'local_analytics');
-$description = get_string('cleanurl_desc', 'local_analytics');
-$default = true;
-$setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-$settings->add($setting);
+	$name = 'local_analytics/cleanurl';
+	$title = get_string('cleanurl', 'local_analytics');
+	$description = get_string('cleanurl_desc', 'local_analytics');
+	$default = true;
+	$setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
+	$settings->add($setting);
+}
