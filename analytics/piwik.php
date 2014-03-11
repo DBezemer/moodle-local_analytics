@@ -107,8 +107,5 @@ function insert_analytics_tracking() {
 insert_analytics_tracking();
 
 if (debugging() && ($CFG->debugdisplay)) {
-	if (empty($siteurl)) {
-		$CFG->additionalhtmlfooter .= "<span class='badge badge-important'>The Piwik Site URL is not set</span>";
-	}
     $CFG->additionalhtmlfooter .= "<span class='badge badge-success'>Tracking: ".analytics_trackurl()."</span>";
 }
