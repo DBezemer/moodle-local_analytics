@@ -74,7 +74,7 @@ function insert_analytics_tracking() {
     
 	if (!empty($siteurl)) {
 		if ($imagetrack) {
-			$addition = '<noscript><p><img src="//'.$siteurl.'/piwik.php?idsite='.$siteid.' style="border:0" alt="" /></p></noscript>';
+			$addition = '<noscript><p><img src="http://'.$siteurl.'/piwik.php?idsite='.$siteid.'" style="border:0" alt="" /></p></noscript>';
 		} else {
 			$addition = '';
 		}
