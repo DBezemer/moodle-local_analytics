@@ -15,14 +15,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Piwik Analytics
+ * Analytics
  *
- * This module provides extensive analytics, without the privacy concerns
- * of using Google Analytics, see install_piwik.txt for installing Piwik
+ * This module provides extensive analytics on a platform of choice
+ * Currently support Google Analytics and Piwik
  *
  * @package    local_analytics
- * @copyright  2013 David Bezemer, www.davidbezemer.nl
- * @author     David Bezemer
+ * @copyright  David Bezemer <info@davidbezemer.nl>, www.davidbezemer.nl
+ * @author     David Bezemer <info@davidbezemer.nl>, Bas Brands <bmbrands@gmail.com>, Gavin Henrick <gavin@lts.ie>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
  
@@ -64,36 +64,30 @@ function analytics_trackurl() {
 }
  
 function insert_analytics_tracking() {
-    global $CFG,$PAGE;
+    global $CFG;
     $enabled = get_config('local_analytics', 'enabled');
     $siteid = get_config('local_analytics', 'siteid');
     $trackadmin = get_config('local_analytics', 'trackadmin');
     $cleanurl = get_config('local_analytics', 'cleanurl');
     
-    if ($cleanurl) {
-        $addition = 
-            "{'hitType' : 'pageview',
-            'page' : ".analytics_trackurl().",
-            'title' : '".addslashes($PAGE->heading)."'
-            }";
-    } else {
-        $addition = "'pageview'";
-    }
-    
-    
     if ($enabled && (!is_siteadmin() || $trackadmin)) {
-        $CFG->additionalhtmlhead .= "   
-            <script>
-            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-            ga('create', '".$siteid."', {'siteSpeedSampleRate': 50});
-            ga('send', ".$addition.");
-			
+        $CFG->additionalhtmlfooter .= "
+            <script type='text/javascript' name='localga'>
+              var _gaq = _gaq || [];
+              _gaq.push(['_setAccount', '".$siteid."']);
+              _gaq.push(['_trackPageview',".($cleanurl ? analytics_trackurl() : '')."]);
+              _gaq.push(['_setSiteSpeedSampleRate', 50]);
+
+              (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; 
+                ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+              })();
             </script>
 			";
     }
+    
 }
 
 insert_analytics_tracking();

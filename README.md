@@ -7,7 +7,7 @@ The plugin features the following options:
 - exclude tracking of admin users
 - build full navigation tree for Piwik course category and activity tracking
 - image based tracking in case javascript is disabled (for Piwik)
-- advanced analytics for Google analytics (based on Bas Brands and Gavin Henricks work in 2013)
+- advanced analytics for Google analytics (based on Bas Brands and Gavin Henricks work in 2013 http://www.somerandomthoughts.com/blog/2012/04/18/ireland-uk-moodlemoot-analytics-to-the-front/)
 
 Install instructions:
 1. Copy the analytics directory to the local directory of your Moodle instance
