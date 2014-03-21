@@ -22,7 +22,7 @@
  *
  * @package    local_analytics
  * @copyright  David Bezemer <info@davidbezemer.nl>, www.davidbezemer.nl
- * @author     David Bezemer <info@davidbezemer.nl>
+ * @author     David Bezemer <info@davidbezemer.nl>, Bas Brands <bmbrands@gmail.com>, Gavin Henrick <gavin@lts.ie>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
  
@@ -71,10 +71,11 @@ function insert_analytics_tracking() {
     $siteid = get_config('local_analytics', 'siteid');
     $trackadmin = get_config('local_analytics', 'trackadmin');
     $cleanurl = get_config('local_analytics', 'cleanurl');
+	$location = "additionalhtml".get_config('local_analytics', 'location');
     
 	if (!empty($siteurl)) {
 		if ($imagetrack) {
-			$addition = '<noscript><p><img src="//'.$siteurl.'/piwik.php?idsite='.$siteid.'" style="border:0" alt="" /></p></noscript>';
+			$addition = '<noscript><p><img src="//'.$siteurl.'/piwik.php?idsite='.$siteid.' style="border:0" alt="" /></p></noscript>';
 		} else {
 			$addition = '';
 		}
@@ -86,18 +87,17 @@ function insert_analytics_tracking() {
 		}
 		
 		if ($enabled && (!is_siteadmin() || $trackadmin)) {
-			$CFG->additionalhtmlfooter = "
-				<script type='text/javascript'> 
-				var _paq = _paq || [];
-				".$doctitle."
-				_paq.push(['trackPageView']);
-				_paq.push(['enableLinkTracking']);
-				(function() {
-				var u=(('https:' == document.location.protocol) ? 'https' : 'http') + '://".$siteurl."/';
-				_paq.push(['setTrackerUrl', u+'piwik.php']);
-				_paq.push(['setSiteId', ".$siteid."]);
-				var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0]; g.type='text/javascript';
-				g.defer=true; g.async=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s); })();
+			$CFG->$location .= "
+				<script type='text/javascript'>
+					var _paq = _paq || [];
+					(function(){ var u=(('https:' == document.location.protocol) ? 'https://".$siteurl."/' : 'http://".$siteurl."/');
+					_paq.push(['setSiteId', ".$siteid."]);
+					_paq.push(['setTrackerUrl', u+'piwik.php']);
+					_paq.push(['trackPageView']);
+					".$doctitle."
+					_paq.push(['enableLinkTracking']);
+					var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0]; g.type='text/javascript'; g.defer=true; g.async=true; g.src=u+'piwik.js';
+					s.parentNode.insertBefore(g,s); })();
 				</script>
 				".$addition;
 		}

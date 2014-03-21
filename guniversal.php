@@ -69,6 +69,7 @@ function insert_analytics_tracking() {
     $siteid = get_config('local_analytics', 'siteid');
     $trackadmin = get_config('local_analytics', 'trackadmin');
     $cleanurl = get_config('local_analytics', 'cleanurl');
+	$location = "additionalhtml".get_config('local_analytics', 'location');
     
     if ($cleanurl) {
         $addition = 
@@ -82,7 +83,7 @@ function insert_analytics_tracking() {
     
     
     if ($enabled && (!is_siteadmin() || $trackadmin)) {
-        $CFG->additionalhtmlhead .= "   
+        $CFG->$location .= "   
             <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

@@ -69,9 +69,10 @@ function insert_analytics_tracking() {
     $siteid = get_config('local_analytics', 'siteid');
     $trackadmin = get_config('local_analytics', 'trackadmin');
     $cleanurl = get_config('local_analytics', 'cleanurl');
+	$location = "additionalhtml".get_config('local_analytics', 'location');
     
     if ($enabled && (!is_siteadmin() || $trackadmin)) {
-        $CFG->additionalhtmlfooter .= "
+        $CFG->$location .= "
             <script type='text/javascript' name='localga'>
               var _gaq = _gaq || [];
               _gaq.push(['_setAccount', '".$siteid."']);

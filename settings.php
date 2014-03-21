@@ -53,7 +53,7 @@ if (is_siteadmin()) {
 					);
 	$setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
 	$settings->add($setting);
-
+	
 	$name = 'local_analytics/siteid';
 	$title = get_string('siteid', 'local_analytics');
 	$description = get_string('siteid_desc', 'local_analytics');
@@ -87,5 +87,20 @@ if (is_siteadmin()) {
 	$description = get_string('cleanurl_desc', 'local_analytics');
 	$default = true;
 	$setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
+	$settings->add($setting);
+	
+	$name = 'local_analytics/location';
+	$title = get_string('location' , 'local_analytics');
+	$description = get_string('locationdesc', 'local_analytics');
+	$head = get_string('head', 'local_analytics');
+	$topofbody = get_string('topofbody', 'local_analytics');
+	$footer = get_string('footer', 'local_analytics');
+	$default = 'head';
+	$choices = array(   
+					'head' => $head,
+					'topofbody' => $topofbody,
+					'footer' => $footer,
+					);
+	$setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
 	$settings->add($setting);
 }
