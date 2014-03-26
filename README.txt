@@ -20,7 +20,7 @@ The plugin currently supports 3 Analytics modes, Piwik, Google Universal Analyti
 Piwik
 - Set the Site ID
 - Choose whether you want image fallback tracking
-- Enter the URL to your Piwik install excluding http/https
+- Enter the URL to your Piwik install excluding http/https and trailing slashes
 - Choose whether you want to track admins (not recommended)
 - Choose whether you want to send Clean URLs (recommended):
 	Piwik will aggregrate Page Titles and show a nice waterfall cascade of all sites, including categories and action types
