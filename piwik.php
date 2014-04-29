@@ -35,7 +35,7 @@ function analytics_trackurl() {
     if (isset($pageinfo[1]->category)) {
         if ($category = $DB->get_record('course_categories', array('id'=>$pageinfo[1]->category))) {
             $cats=explode("/",$category->path);
-            foreach ($cats as $cat) {
+            foreach(array_filter($cats) as $cat) {
                 if ($categorydepth = $DB->get_record("course_categories", array("id" => $cat))) {;
                     $trackurl .= $categorydepth->name.'/';
                 }
